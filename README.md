@@ -3,6 +3,7 @@
 ## Description
 
 This project is a Budget Tracker with a progressive web application. It includes tracking of budgets by adding expenses and deposits to "Add/Subtract Funds" buttons. The tracker is available with or without a internet connection. 
+![screencapture-localhost-3000-2022-04-26-14_26_16](https://user-images.githubusercontent.com/92898110/165377100-ec31ec1b-274e-4259-b314-e6205849c838.png)
 
 ## Table of Contents
 
