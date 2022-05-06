@@ -7,11 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "lite-server": "lite-server",
-    "webpack": "webpack --watch",
-    "build": "webpack",
-    "heroku-postbuild": "ng build --prod", // this will be run on Heroku
-    "heroku-postbuild": "echo This runs after Heroku installs dependencies, but before Heroku prunes and caches dependencies.",
-    "heroku-cleanup": "echo This runs after Heroku prunes and caches dependencies."
+    "webpack": "webpack --watch"
+    
   },
   "repository": {
     "type": "git",
