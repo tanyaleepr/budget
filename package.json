@@ -8,7 +8,6 @@
     "start": "node server.js",
     "lite-server": "lite-server",
     "webpack": "webpack --watch"
-    
   },
   "repository": {
     "type": "git",
@@ -30,7 +29,8 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
     "popper.js": "^1.16.0",
-    "save": "^2.5.0"
+    "save": "^2.5.0",
+    "serve": "^13.0.2"
   },
   "devDependencies": {
     "webpack": "^4.46.0",
