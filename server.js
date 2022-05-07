@@ -5,7 +5,7 @@ const compression = require("compression");
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/budget";
+// const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/budget";
 
 mongoose.connect(`mongodb://${process.env.DB_NAME}:${process.env.DB_PASS}@ds241658.mlab.com:41658/pwa-test`,(err)=>{
 if(err) throw err;
