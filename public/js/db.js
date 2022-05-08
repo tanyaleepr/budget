@@ -1,17 +1,18 @@
 let db;
 
-const request = indexedDB.open("PWA", 1);
+const request = indexedDB.open("pwa", 1);
 
 
 request.onupgradeneeded = function (event) {
-
+  // Reference to the database
   const db = event.target.result;
-
+  // Object store 
   db.createObjectStore("new_transaction", { autoIncrement: true });
 };
 
+
 request.onsuccess = function (event) {
- 
+
   db = event.target.result;
 
   if (navigator.onLine) {
@@ -19,18 +20,18 @@ request.onsuccess = function (event) {
   }
 };
 
-// Handles reporting 
+
 request.onerror = function (event) {
   console.log(event.target.errorCode);
 };
 
-// Function to handle offline submits
+
 function saveRecord(record) {
-  // Open a new transaction with the db 
+ 
   const transaction = db.transaction(["new_transaction"], "readwrite");
-  // Access object store
+ 
   const transactionObjectStore = transaction.objectStore("new_transaction");
-  // Add record 
+ 
   transactionObjectStore.add(record);
  
   alert("Transaction submitted successfully!");
@@ -38,14 +39,14 @@ function saveRecord(record) {
 
 
 function uploadTransaction() {
-  // Open a transaction 
+
   const transaction = db.transaction(["new_transaction"], "readwrite");
   const transactionObjectStore = transaction.objectStore("new_transaction");
   const getAll = transactionObjectStore.getAll();
 
 
   getAll.onsuccess = function () {
-    // Check for data
+   
     if (getAll.result.length > 0) {
       
       fetch("/api/transaction", {
@@ -60,12 +61,12 @@ function uploadTransaction() {
           if (serverResponse.message) {
             throw new Error(serverResponse);
           }
-          // Open a transaction
+          // Open a transaction to clear the store
           const transaction = db.transaction(["new_transaction"], "readwrite");
           const transactionObjectStore =
             transaction.objectStore("new_transaction");
           transactionObjectStore.clear();
-          // Dev alert
+          // alert
           alert("Saved transactions submitted!");
         })
         .catch((err) => console.log(err));
