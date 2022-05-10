@@ -1,12 +1,10 @@
-require('dotenv').config({path: "/.env"});
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const compression = require("compression");
 
 const PORT = process.env.PORT || 3001;
-const MONGODB_URL = process.env.MONGODB_URL || "mongodb://localhost/pwa";
-console.log(MONGODB_URL);
+const MONGODB_URL = process.env.MONGODB_URL || "mongodb://localhost/budget";
 
 const app = express();
 
@@ -24,7 +22,7 @@ mongoose.connect(MONGODB_URL, {
   useUnifiedTopology: true,
 });
 
-// routes
+
 app.use(require("./routes/api.js"));
 
 app.listen(PORT, () => {

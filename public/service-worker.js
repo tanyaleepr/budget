@@ -10,7 +10,7 @@ const FILES_TO_CACHE = [
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
-    // Add files to the cache
+   
     caches.open(CACHE_NAME).then((cache) => {
       console.log(`Installing cache : ${CACHE_NAME}`);
       return cache.addAll(FILES_TO_CACHE);
@@ -20,13 +20,13 @@ self.addEventListener("install", function (event) {
 
 self.addEventListener("activate", function (event) {
   event.waitUntil(
-    
+
     caches.keys().then((keyList) => {
       let cacheKeepList = keyList.filter(function (key) {
         return key.indexOf(APP_PREFIX);
       });
 
-     
+      
       cacheKeepList.push(CACHE_NAME);
 
       
