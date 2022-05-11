@@ -24,7 +24,7 @@ To start the server, run `npm start` and access your http://localhost:3000 in th
 
 ## Example Usage
 
-Deployed App: https://dry-tundra-64292.herokuapp.com/
+Deployed App: https://stark-headland-18299.herokuapp.com/
 
 
 ## License
