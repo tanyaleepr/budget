@@ -1,55 +1,74 @@
-const APP_PREFIX = "PWA";
-const VERSION = "version_01";
-const CACHE_NAME = APP_PREFIX + VERSION;
 const FILES_TO_CACHE = [
-  "/index.html",
+  "/",
+  "/public/index.html",
   "/public/css/styles.css",
-  "/js/index.js",
-  "/js/db.js",
+  "/public/js/index.js",
+  "/public/js/db.js"
 ];
 
-self.addEventListener("install", function (event) {
-  event.waitUntil(
-   
+const CACHE_NAME = "static-cache-v1";
+const DATA_CACHE_NAME = "data-cache-v1";
+
+self.addEventListener("install", (evt) => {
+  evt.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log(`Installing cache : ${CACHE_NAME}`);
       return cache.addAll(FILES_TO_CACHE);
     })
   );
+
+  self.skipWaiting();
 });
 
-self.addEventListener("activate", function (event) {
-  event.waitUntil(
-
+self.addEventListener("activate", (evt) => {
+  // remove old caches
+  evt.waitUntil(
     caches.keys().then((keyList) => {
-      let cacheKeepList = keyList.filter(function (key) {
-        return key.indexOf(APP_PREFIX);
-      });
-
-      
-      cacheKeepList.push(CACHE_NAME);
-
-      
       return Promise.all(
-        keyList.map(function (key, i) {
-          if (cacheKeepList.indexOf(key) === -1) {
-            console.log(`Deleting cache : ${keyList[i]}`);
-            return caches.delete(keyList[i]);
+        keyList.map((key) => {
+          if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+            return caches.delete(key);
           }
         })
       );
     })
   );
+
+  self.clients.claim();
 });
 
-self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then(function (request) {
-      if (request) {
-        return request;
-      } else {
-        return fetch(event.request);
-      }
+self.addEventListener("fetch", (evt) => {
+  // cache successful GET requests to the API
+  if (evt.request.url.includes("/api/") && evt.request.method === "GET") {
+    evt.respondWith(
+      caches
+        .open(DATA_CACHE_NAME)
+        .then((cache) => {
+          return fetch(evt.request)
+            .then((response) => {
+              // If the response was good, clone it and store it in the cache.
+              if (response.status === 200) {
+                cache.put(evt.request, response.clone());
+              }
+
+              return response;
+            })
+            .catch(() => {
+              // Network request failed, try to get it from the cache.
+              return cache.match(evt.request);
+            });
+        })
+        .catch((err) => console.log(err))
+    );
+
+    // stop execution of the fetch event callback
+    return;
+  }
+
+  // if the request is not for the API, serve static assets using
+  // "offline-first" approach.
+  evt.respondWith(
+    caches.match(evt.request).then((response) => {
+      return response || fetch(evt.request);
     })
   );
 });
